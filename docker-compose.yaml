@@ -20,7 +20,7 @@ services:
     volumes:
       - ./HublaBackEnd:/api
     environment:
-      - DATABASE_URL=http://db:5432
+      - DATABASE_URL=postgresql://postgres:1234@db:5432/postgres
     ports:
       - "8000:8000"
     working_dir: /api

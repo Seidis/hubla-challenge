@@ -1,6 +1,5 @@
 import os
-
-import config
+import database
 from routes import routes
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
@@ -22,22 +21,16 @@ app.add_middleware(
 )
 
 
-# @app.on_event("startup")
-# async def startup() -> None:
-#     try:
-#         await config.database.connect()
-#     except Exception as e:
-#         print(e)
+@app.on_event("startup")
+async def startup():
+    try:
+        database.Base.metadata.create_all(database.engine)
+    except Exception as e:
+        print("Error creating database" + str(e))
+        raise e
 
 
-# @app.on_event("shutdown")
-# async def shutdown() -> None:
-#     try:
-#         await config.database.disconnect()
-#     except Exception as e:
-#         print(e)
+app.add_middleware(DBSessionMiddleware, db_url=os.getenv("DATABASE_URL"))
 
-
-# app.add_middleware(DBSessionMiddleware, db_url=config.BASE_URL)
 
 app.include_router(routes)
