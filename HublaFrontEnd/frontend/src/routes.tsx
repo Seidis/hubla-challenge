@@ -12,7 +12,7 @@ export default function AppRouter() {
       <Routes>
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
-        <Route element={<ProtectedRoute isAlowed={true} />}>
+        <Route element={<ProtectedRoute />}>
           <Route path="/" element={<Header />}>
             <Route path="home" element={<Default />} />
           </Route>

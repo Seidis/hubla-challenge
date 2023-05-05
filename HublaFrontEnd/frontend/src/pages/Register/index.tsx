@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { createUserWithEmailAndPassword } from "firebase/auth";
+import { ErrorMessages } from "utils/types";
 
 import "./index.css";
 import Box from "@mui/material/Box";
@@ -20,10 +21,8 @@ export default function Register() {
   const [passwordConfirm, setPasswordConfirm] = useState("");
 
   const handleRegister = async () => {
-    let message = "";
     if (password !== passwordConfirm) {
-      message = "As senhas não coincidem!";
-      toastError(message);
+      toastError("As senhas não coincidem!");
       return;
     }
     await createUserWithEmailAndPassword(auth, email, password)
@@ -32,17 +31,12 @@ export default function Register() {
         navigate("/login");
       })
       .catch((error) => {
-        message =
-          error.code === "auth/weak-password"
-            ? "Senha muito fraca!"
-            : "Erro ao realizar cadastro!";
-        message =
-          error.code === "auth/email-already-in-use"
-            ? "Email já cadastrado!"
-            : message;
-        message =
-          error.code === "auth/invalid-email" ? "Email inválido!" : message;
-        toastError(message);
+        const errorMessages: ErrorMessages = {
+          "auth/weak-password": "Senha muito fraca!",
+          "auth/email-already-in-use": "Email já cadastrado!",
+          "auth/invalid-email": "Email inválido!",
+        };
+        toastError(errorMessages[error.code] || "Erro ao realizar cadastro!");
       });
   };
 

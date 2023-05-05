@@ -4,6 +4,7 @@ import { signInWithEmailAndPassword } from "firebase/auth";
 
 import { auth } from "config/firebase";
 import { toastError, toastSuccess } from "components/Toast";
+import { ErrorMessages } from "utils/types";
 
 import "./index.css";
 import { AiFillInsurance } from "react-icons/ai";
@@ -12,39 +13,25 @@ import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import ButtonGroup from "@mui/material/ButtonGroup";
 import PasswordInput from "components/PasswordInput";
-import { setTokens } from "config/auth";
 
 export default function Login() {
   const navigate = useNavigate();
-
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
   const handleLogin = async () => {
-    let message = "";
-    await signInWithEmailAndPassword(auth, email, password)
-      .then(async (userCredential) => {
-        const accessToken = await userCredential.user.getIdToken();
-        const refreshToken = userCredential.user.refreshToken;
-        setTokens({ data: { accessToken, refreshToken } });
-
-        toastSuccess("Login realizado com sucesso!");
-        navigate("/");
-      })
-      .catch((error) => {
-        message =
-          error.code === "auth/wrong-password"
-            ? "Senha incorreta!"
-            : "Erro ao realizar login!";
-        message =
-          error.code === "auth/user-not-found"
-            ? "Usuário não encontrado!"
-            : message;
-        message =
-          error.code === "auth/invalid-email" ? "Email inválido!" : message;
-
-        toastError(message);
-      });
+    try {
+      await signInWithEmailAndPassword(auth, email, password);
+      toastSuccess("Login realizado com sucesso!");
+      navigate("/home");
+    } catch (error: any) {
+      const errorMessages: ErrorMessages = {
+        "auth/wrong-password": "Senha incorreta!",
+        "auth/user-not-found": "Usuário não encontrado!",
+        "auth/invalid-email": "Email inválido!",
+      };
+      toastError(errorMessages[error.code] || "Erro ao realizar login!");
+    }
   };
 
   return (
