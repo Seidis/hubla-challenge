@@ -1,0 +1,41 @@
+version: "3.8"
+
+services:
+  db:
+    image: postgres
+    volumes:
+      - ./HublaBackEnd/db:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_DB=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=1234
+
+    ports:
+      - "5432:5432"
+    restart: always
+
+  api:
+    build: ./HublaBackEnd
+    command: python3 development.py
+    volumes:
+      - ./HublaBackEnd:/api
+    environment:
+      - DATABASE_URL=http://db:5432
+    ports:
+      - "8000:8000"
+    working_dir: /api
+
+  frontend:
+    build: ./HublaFrontEnd/frontend
+    command: npm start
+    volumes:
+      - ./HublaFrontEnd/frontend:/frontend
+    ports:
+      - "3000:3000"
+    working_dir: /frontend
+    stdin_open: true
+    tty: true
+
+networks:
+  default:
+    name: app-network

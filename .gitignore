@@ -1,0 +1,25 @@
+# Build files
+/HublaFrontend/frontend/build
+/HublaFrontend/frontend/dist
+
+# Dependencies
+/HublaFrontend/frontend/node_modules
+
+# Build cache
+.cache
+
+# IDE files
+.vscode/
+.idea/
+
+# Miscellaneous
+*.DS_Store
+*.pem
+*.pid
+*.sqlite
+*.swp
+*.zip
+
+# Python
+/HublaBackEnd/venv
+/HublaBackEnd/db
