@@ -23,3 +23,11 @@
 # Python
 /HublaBackEnd/venv
 /HublaBackEnd/db
+
+*.pyc
+__pycache__/
+*.pyo
+*.egg-info/
+dist/
+build/
+*.egg

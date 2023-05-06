@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { auth } from "config/firebase";
 import { signOut } from "firebase/auth";
 

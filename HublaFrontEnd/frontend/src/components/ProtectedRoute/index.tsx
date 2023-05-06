@@ -1,5 +1,4 @@
 import { toastWarn } from "components/Toast";
-import { firebaseUser } from "config/auth";
 import { useEffect } from "react";
 import { Navigate, Outlet } from "react-router-dom";
 
@@ -12,7 +11,7 @@ export default function ProtectedRoute({
     if (!alowed) {
       toastWarn("Você precisa estar logado para acessar essa página");
     }
-  }, []);
+  });
 
   if (!alowed) {
     return <Navigate to={redirectPath} replace />;
