@@ -1,4 +1,9 @@
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Navigate,
+} from "react-router-dom";
 
 import Login from "pages/Login";
 import Register from "pages/Register";
@@ -14,6 +19,7 @@ export default function AppRouter() {
         <Route path="/register" element={<Register />} />
         <Route element={<ProtectedRoute />}>
           <Route path="/" element={<Header />}>
+            <Route path="*" element={<Navigate to="home" />} />
             <Route path="home" element={<Default />} />
           </Route>
         </Route>

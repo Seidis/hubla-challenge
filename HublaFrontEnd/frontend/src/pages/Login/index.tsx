@@ -7,7 +7,7 @@ import { toastError, toastSuccess } from "components/Toast";
 import { ErrorMessages } from "utils/types";
 
 import "./index.css";
-import { AiFillInsurance } from "react-icons/ai";
+import Logo from "assets/hubla_logo.png";
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
@@ -21,7 +21,9 @@ export default function Login() {
 
   const handleLogin = async () => {
     try {
-      await signInWithEmailAndPassword(auth, email, password);
+      await signInWithEmailAndPassword(auth, email, password).finally(() => {
+        localStorage.setItem("email", email);
+      });
       toastSuccess("Login realizado com sucesso!");
       navigate("/home");
     } catch (error: any) {
@@ -38,7 +40,7 @@ export default function Login() {
     <Box className="login">
       <Box className="login__container">
         <Box className="login__container__logo">
-          <AiFillInsurance />
+          <img src={Logo} alt="logo" />
         </Box>
         <Box className="login__container__form">
           <Box className="login__container__form__input">

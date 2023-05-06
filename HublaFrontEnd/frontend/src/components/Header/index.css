@@ -1,9 +1,32 @@
 .header__container {
-  width: 100%;
   height: 100px;
-  background-color: #bcbcbc;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.header__logo {
+  width: 100px;
+  height: 100%;
+  justify-content: center;
+  align-items: center;
+}
+
+.header__logo__img {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.header__logo__img img {
+  width: 50%;
+  height: auto;
+}
+
+.header__menu__user {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 0 50px;
+  width: 300px;
 }

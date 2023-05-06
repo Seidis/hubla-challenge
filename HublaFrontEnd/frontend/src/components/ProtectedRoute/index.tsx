@@ -7,13 +7,14 @@ export default function ProtectedRoute({
   children,
   redirectPath = "/login",
 }: any) {
+  const alowed = localStorage.getItem("email");
   useEffect(() => {
-    if (firebaseUser()) {
+    if (!alowed) {
       toastWarn("Você precisa estar logado para acessar essa página");
     }
   }, []);
 
-  if (firebaseUser()) {
+  if (!alowed) {
     return <Navigate to={redirectPath} replace />;
   }
   return children ? children : <Outlet />;
