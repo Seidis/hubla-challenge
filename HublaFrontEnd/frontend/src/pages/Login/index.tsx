@@ -21,9 +21,21 @@ export default function Login() {
 
   const handleLogin = async () => {
     try {
-      await signInWithEmailAndPassword(auth, email, password).finally(() => {
-        localStorage.setItem("email", email);
-      });
+      await signInWithEmailAndPassword(auth, email, password).then(
+        (UserCredential) => {
+          localStorage.setItem("email", email);
+          localStorage.setItem(
+            "accessToken",
+            // @ts-ignore
+            UserCredential._tokenResponse.idToken
+          );
+          localStorage.setItem(
+            "refreshToken",
+            // @ts-ignore
+            UserCredential._tokenResponse.refreshToken
+          );
+        }
+      );
       toastSuccess("Login realizado com sucesso!");
       navigate("/home");
     } catch (error: any) {

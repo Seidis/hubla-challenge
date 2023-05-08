@@ -26,7 +26,8 @@ export default function MenuTooltip({
   function handleLogOut() {
     signOut(auth)
       .then(() => {
-        localStorage.removeItem("email");
+        localStorage.removeItem("accessToken");
+        localStorage.removeItem("refreshToken");
         navigate("/login");
       })
       .catch((error) => {
