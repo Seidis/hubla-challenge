@@ -21,9 +21,7 @@ router = APIRouter()
 async def get_transactions(
     db: Session = Depends(get_db),
     user: UserRecord = Depends(get_current_user),
-    transaction_type: Optional[int] = None,
-    product_id: Optional[int] = None,
-    seller_id: Optional[int] = None,
+    search: Optional[str] = None,
 ):
     """
     This function returns a list of transactions based on the given filters.\n
@@ -36,11 +34,6 @@ async def get_transactions(
     """
 
     user_id = user._data["localId"]
-    filter_dict = {
-        "transaction_type": transaction_type,
-        "product_id": product_id,
-        "seller_id": seller_id,
-    }
 
     transactions = (
         db.query(
@@ -63,11 +56,18 @@ async def get_transactions(
         .all()
     )
 
-    for filter_name, filter_value in filter_dict.items():
-        if filter_value:
-            transactions = [
-                t for t in transactions if getattr(t, filter_name) == filter_value
-            ]
+    if search:
+        transactions = [
+            transaction
+            for transaction in transactions
+            if search.lower() in transaction.product_description.lower()
+            or search.lower() in transaction.seller_name.lower()
+            or search.lower() in transaction.transaction_type_description.lower()
+            or search.lower() in str(transaction.transaction_date).lower()
+            or search.lower() in str(transaction.transaction_value).lower()
+            or search.lower() in str(transaction.comission).lower()
+            or search.lower() in str(transaction.id).lower()
+        ]
 
     return transactions
 

@@ -51,18 +51,21 @@ export const DataGridColumns: GridColDef[] = [
 
 export const DataTableColumns: TableColumn<ITransaction>[] = [
   {
+    id: "id",
     name: "ID",
     selector: (row: ITransaction) => row.id,
     sortable: true,
     width: "80px",
   },
   {
+    id: "transaction_type_description",
     name: "Tipo da Transação",
     selector: (row: ITransaction) => row.transaction_type_description,
     sortable: true,
     width: "200px",
   },
   {
+    id: "product_description",
     name: "Descrição do Produto",
     selector: (row: ITransaction) => row.product_description,
     sortable: true,
@@ -72,6 +75,7 @@ export const DataTableColumns: TableColumn<ITransaction>[] = [
     },
   },
   {
+    id: "transaction_value",
     name: "Valor da Transação",
     selector: (row: ITransaction) => row.transaction_value,
     sortable: true,
@@ -84,6 +88,7 @@ export const DataTableColumns: TableColumn<ITransaction>[] = [
     },
   },
   {
+    id: "seller_name",
     name: "Nome do Vendedor",
     selector: (row: ITransaction) => row.seller_name,
     sortable: true,
@@ -93,6 +98,7 @@ export const DataTableColumns: TableColumn<ITransaction>[] = [
     },
   },
   {
+    id: "comission",
     name: "Comissão",
     selector: (row: ITransaction) => row.comission,
     sortable: true,
@@ -102,7 +108,6 @@ export const DataTableColumns: TableColumn<ITransaction>[] = [
         style: "currency",
         currency: "BRL",
       }).format(row.comission);
-      console.log(row.comission);
       return row.signal ? (
         <Chip
           label={formatedNumber}
@@ -127,6 +132,7 @@ export const DataTableColumns: TableColumn<ITransaction>[] = [
     },
   },
   {
+    id: "transaction_date",
     name: "Data da Transação",
     selector: (row: ITransaction) => row.transaction_date,
     sortable: true,
