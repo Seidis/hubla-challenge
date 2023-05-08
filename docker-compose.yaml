@@ -30,6 +30,8 @@ services:
     command: npm start
     volumes:
       - ./HublaFrontEnd/frontend:/frontend
+    environment:
+      - REACT_APP_API_URL=http://localhost:8000
     ports:
       - "3000:3000"
     working_dir: /frontend

@@ -4,6 +4,7 @@
 
 # Dependencies
 /HublaFrontend/frontend/node_modules
+HublaFrontEnd/frontend/.env
 
 # Build cache
 .cache
