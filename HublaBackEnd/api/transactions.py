@@ -20,7 +20,7 @@ router = APIRouter()
 @router.get("/", response_model=List[Transaction])
 async def get_transactions(
     db: Session = Depends(get_db),
-    # user: UserRecord = Depends(get_current_user),
+    user: UserRecord = Depends(get_current_user),
     transaction_type: Optional[int] = None,
     product_id: Optional[int] = None,
     seller_id: Optional[int] = None,
@@ -35,7 +35,7 @@ async def get_transactions(
         seller_id: int - filter by seller id
     """
 
-    user_id = 1
+    user_id = user._data["localId"]
     filter_dict = {
         "transaction_type": transaction_type,
         "product_id": product_id,
@@ -135,7 +135,7 @@ async def save_file(
         data: List[Dict[str, Union[str, int, None]]] - parsed data from the file
     """
 
-    user_id = 1
+    user_id = user._data["localId"]
     comission = None
 
     for line in data:
@@ -188,7 +188,10 @@ def check_existence_in_db(db, table, filter_column, filter_value, user_id, **kwa
     """
 
     filter_criteria = {filter_column: filter_value}
-    item = db.query(table).filter_by(**filter_criteria).first()
+    user_criteria = {"user_id": user_id}
+    item = (
+        db.query(table).filter_by(**filter_criteria).filter_by(**user_criteria).first()
+    )
     if not item:
         item_kwargs = kwargs
         item_kwargs.update(filter_criteria)

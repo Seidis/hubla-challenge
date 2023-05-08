@@ -12,6 +12,7 @@ import Login from "pages/Login";
 import Register from "pages/Register";
 import Default from "pages/Default";
 import Upload from "pages/Upload";
+import Transactions from "pages/Transactions";
 
 export default function AppRouter() {
   return (
@@ -24,6 +25,7 @@ export default function AppRouter() {
             <Route path="*" element={<Navigate to="home" />} />
             <Route path="home" element={<Default />} />
             <Route path="upload" element={<Upload />} />
+            <Route path="transactions" element={<Transactions />} />
           </Route>
         </Route>
       </Routes>

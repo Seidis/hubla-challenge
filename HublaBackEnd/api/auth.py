@@ -1,17 +1,8 @@
-from fastapi import APIRouter, Depends, HTTPException, Request
+from fastapi import APIRouter, HTTPException, Request
 from firebase_admin import auth
 from firebase_admin.exceptions import FirebaseError
 
 router = APIRouter()
-
-
-def validate_token(token):
-    try:
-        decoded_token = auth.verify_id_token(token)
-        return True
-    except Exception as e:
-        print(e)
-        return False
 
 
 def get_current_user(request: Request) -> auth.UserRecord:

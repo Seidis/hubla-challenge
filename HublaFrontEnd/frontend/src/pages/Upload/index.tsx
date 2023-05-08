@@ -1,8 +1,9 @@
 import { useState } from "react";
 import { api } from "api";
-import { format } from "date-fns";
+import { useNavigate } from "react-router-dom";
+import { DataGridColumns } from "utils/data_table";
 
-import { DataGrid, GridColDef } from "@mui/x-data-grid";
+import { DataGrid } from "@mui/x-data-grid";
 import { GrDocumentUpload } from "react-icons/gr";
 import {
   Backdrop,
@@ -14,54 +15,11 @@ import {
   Input,
   Button,
 } from "@mui/material";
-import { formatName } from "utils/functions";
 import { toastError, toastSuccess } from "components/Toast";
 
-const columns: GridColDef[] = [
-  {
-    field: "transaction_type_description",
-    headerName: "Tipo da Transação",
-    width: 200,
-  },
-  {
-    field: "product_description",
-    headerName: "Descrição do Produto",
-    width: 300,
-    valueFormatter: (params) => {
-      return formatName(params.value as string);
-    },
-  },
-  {
-    field: "transaction_value",
-    headerName: "Valor da Transação",
-    type: "number",
-    width: 200,
-    valueFormatter: (params) => {
-      return new Intl.NumberFormat("pt-BR", {
-        style: "currency",
-        currency: "BRL",
-      }).format(params.value);
-    },
-  },
-  {
-    field: "seller_name",
-    headerName: "Nome do Vendedor",
-    width: 200,
-    valueFormatter: (params) => {
-      return formatName(params.value as string);
-    },
-  },
-  {
-    field: "transaction_date",
-    headerName: "Data da Transação",
-    width: 200,
-    valueFormatter: (params) => {
-      return format(new Date(params.value as string), "dd/MM/yyyy HH:mm:ss");
-    },
-  },
-];
-
 export default function Upload() {
+  const navigateTo = useNavigate();
+
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [data, setData] = useState<any[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
@@ -101,6 +59,7 @@ export default function Upload() {
       .post("/transactions/save_file", data)
       .then((res) => {
         toastSuccess("Dados salvos com sucesso!");
+        navigateTo("/transactions");
       })
       .catch(() => {
         toastError("Erro ao salvar os dados!");
@@ -163,14 +122,15 @@ export default function Upload() {
         </Backdrop>
         <DataGrid
           rows={rows}
-          columns={columns}
+          columns={DataGridColumns}
           initialState={{
             pagination: {
               paginationModel: {
-                pageSize: 20,
+                pageSize: 10,
               },
             },
           }}
+          pageSizeOptions={[10, 20, 50, 100]}
         />
       </Box>
     </Container>

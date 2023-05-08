@@ -52,9 +52,9 @@ export default function Header() {
             <Button
               variant="outlined"
               color="success"
-              onClick={() => navigateTo("/table")}
+              onClick={() => navigateTo("/transactions")}
             >
-              Tabela
+              Transações
             </Button>
             <Button
               variant="outlined"
