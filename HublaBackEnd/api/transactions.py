@@ -11,16 +11,25 @@ from models.vendors import Vendors
 from models.type_transactions import TypeTransactions
 from models.transactions import Transactions
 
+from schemas.transactions import SaveTransaction
 
 router = APIRouter()
 
 
-@router.post("/parse_file/")
+@router.post("/parse_file/", response_model=List[SaveTransaction])
 async def parse_file(
     user: UserRecord = Depends(get_current_user),
     db: Session = Depends(get_db),
     file: UploadFile = File(...),
-):
+) -> List[SaveTransaction]:
+    """
+    This function parses the file and returns a list of dictionaries with the parsed data.
+    params:
+        user: UserRecord - Firebase user object
+        db: Session - SQLAlchemy database session
+        file: UploadFile - file to be parsed
+    """
+
     try:
         content = await file.read()
     except Exception as e:
@@ -60,50 +69,76 @@ async def parse_file(
 async def save_file(
     user: UserRecord = Depends(get_current_user),
     db: Session = Depends(get_db),
-    data: List[Dict[str, Union[str, int, None]]] = [],
-):
+    data: List[SaveTransaction] = [],
+) -> Dict[str, str]:
+    """
+    This function saves the parsed data into the database.
+    params:
+        user: UserRecord - Firebase user object
+        db: Session - SQLAlchemy database session
+        data: List[Dict[str, Union[str, int, None]]] - parsed data from the file
+    """
+
     user_id = 1
     comission = None
-    vendors = db.query(Vendors).all()
-    products = db.query(Products).all()
 
     for line in data:
-        if line["seller_name"] not in [vendor.name for vendor in vendors]:
-            vendor = Vendors(name=line["seller_name"], user_id=user_id)
-            db.add(vendor)
-            db.commit()
-            db.refresh(vendor)
-        else:
-            vendor = (
-                db.query(Vendors).filter(Vendors.name == line["seller_name"]).first()
-            )
-        if line["product_description"] not in [product.name for product in products]:
-            product = Products(
-                name=line["product_description"],
-                user_id=user_id,
-                price=line["transaction_value"],
-            )
-            db.add(product)
-            db.commit()
-            db.refresh(product)
-        else:
-            product = (
-                db.query(Products)
-                .filter(Products.name == line["product_description"])
-                .first()
-            )
-        if int(line["transaction_type"]) in [3, 4]:
-            comission = line["transaction_value"]
+        vendor = check_existence_in_db(
+            db=db,
+            table=Vendors,
+            filter_column="name",
+            filter_value=line.seller_name,
+            user_id=user_id,
+        )
+        product = check_existence_in_db(
+            db=db,
+            table=Products,
+            filter_column="name",
+            filter_value=line.product_description,
+            user_id=user_id,
+            price=line.transaction_value,
+        )
+
+        if line.transaction_type in [3, 4]:
+            comission = line.transaction_value
 
         transaction = Transactions(
             product_id=product.id,
-            transaction_date=line["transaction_date"],
+            transaction_date=line.transaction_date,
             comission=comission,
             seller_id=vendor.id,
             user_id=user_id,
+            transaction_type=line.transaction_type,
         )
         db.add(transaction)
         db.commit()
         db.refresh(transaction)
 
     return {"message": "File saved successfully"}
+
+
+def check_existence_in_db(db, table, filter_column, filter_value, user_id, **kwargs):
+    """
+    This function checks if a given item exists in the database.
+    If it does, it returns the item.
+    If it doesn't, it creates the item and returns it.
+    Params:
+        db: Session - SQLAlchemy database session
+        table: SQLAlchemy table - table to be queried
+        filter_column: SQLAlchemy column - column to be used as filter
+        filter_value: str - value to be used as filter
+        user_id: int - user id
+        **kwargs: dict - additional arguments to be used in case the item doesn't exist
+    """
+
+    filter_criteria = {filter_column: filter_value}
+    item = db.query(table).filter_by(**filter_criteria).first()
+    if not item:
+        item_kwargs = kwargs
+        item_kwargs.update(filter_criteria)
+        item_kwargs["user_id"] = user_id
+        item = table(**item_kwargs)
+        db.add(item)
+        db.commit()
+        db.refresh(item)
+    return item

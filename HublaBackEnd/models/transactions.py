@@ -13,3 +13,4 @@ class Transactions(Base):
     comission = Column(Float, index=True)
     seller_id = Column(Integer, index=True)
     user_id = Column(Integer, index=True)
+    transaction_type = Column(Integer, index=True)
