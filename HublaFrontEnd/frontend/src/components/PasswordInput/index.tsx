@@ -26,7 +26,6 @@ export default function PasswordInput({ setPassword }: PasswordInputProps) {
     <FormControl variant="outlined" fullWidth>
       <InputLabel htmlFor="outlined-adornment-password">Password</InputLabel>
       <OutlinedInput
-        id="outlined-adornment-password"
         type={showPassword ? "text" : "password"}
         endAdornment={
           <InputAdornment position="end">

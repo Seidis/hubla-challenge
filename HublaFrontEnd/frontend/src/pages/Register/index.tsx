@@ -26,9 +26,20 @@ export default function Register() {
       return;
     }
     await createUserWithEmailAndPassword(auth, email, password)
-      .then(() => {
+      .then((UserCredential) => {
+        localStorage.setItem("email", email);
+        localStorage.setItem(
+          "accessToken",
+          // @ts-ignore
+          UserCredential._tokenResponse.idToken
+        );
+        localStorage.setItem(
+          "refreshToken",
+          // @ts-ignore
+          UserCredential._tokenResponse.refreshToken
+        );
         toastSuccess("Cadastro realizado com sucesso!");
-        navigate("/login");
+        navigate("/home");
       })
       .catch((error) => {
         const errorMessages: ErrorMessages = {
