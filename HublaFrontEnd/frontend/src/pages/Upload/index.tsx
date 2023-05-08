@@ -77,13 +77,21 @@ export default function Upload() {
     if (selectedFile) {
       const formData = new FormData();
       formData.append("file", selectedFile);
-      const response = await api.post("/transactions/parse_file", formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      });
-      setData(response.data);
-      setLoading(false);
+      await api
+        .post("/transactions/parse_file", formData, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        })
+        .then((res) => {
+          setData(res.data);
+        })
+        .catch(() => {
+          toastError("Erro ao carregar os dados!");
+        })
+        .finally(() => {
+          setLoading(false);
+        });
     }
   };
 
@@ -92,7 +100,6 @@ export default function Upload() {
     await api
       .post("/transactions/save_file", data)
       .then((res) => {
-        console.log(res);
         toastSuccess("Dados salvos com sucesso!");
       })
       .catch(() => {

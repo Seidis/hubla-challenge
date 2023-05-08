@@ -1,7 +1,7 @@
 from fastapi import APIRouter, UploadFile, File, Depends
 from firebase_admin.auth import UserRecord
 from sqlalchemy.orm import Session
-from typing import Dict, List, Optional, Union
+from typing import Dict, List, Optional
 from database import get_db
 from api.auth import get_current_user
 
@@ -11,9 +11,65 @@ from models.vendors import Vendors
 from models.type_transactions import TypeTransactions
 from models.transactions import Transactions
 
+from schemas.transactions import Transaction
 from schemas.transactions import SaveTransaction
 
 router = APIRouter()
+
+
+@router.get("/", response_model=List[Transaction])
+async def get_transactions(
+    db: Session = Depends(get_db),
+    # user: UserRecord = Depends(get_current_user),
+    transaction_type: Optional[int] = None,
+    product_id: Optional[int] = None,
+    seller_id: Optional[int] = None,
+):
+    """
+    This function returns a list of transactions based on the given filters.\n
+    params:\n
+        db: Session - SQLAlchemy database session
+        user: UserRecord - Firebase user object
+        transaction_type: int - filter by transaction type
+        product_id: int - filter by product id
+        seller_id: int - filter by seller id
+    """
+
+    user_id = 1
+    filter_dict = {
+        "transaction_type": transaction_type,
+        "product_id": product_id,
+        "seller_id": seller_id,
+    }
+
+    transactions = (
+        db.query(
+            Transactions.id,
+            Transactions.transaction_type,
+            Transactions.comission,
+            Transactions.transaction_date,
+            Products.id.label("product_id"),
+            Products.name.label("product_description"),
+            Products.price.label("transaction_value"),
+            Vendors.id.label("seller_id"),
+            Vendors.name.label("seller_name"),
+            TypeTransactions.description.label("transaction_type_description"),
+            TypeTransactions.signal,
+        )
+        .join(TypeTransactions, Transactions.transaction_type == TypeTransactions.id)
+        .join(Products, Transactions.product_id == Products.id)
+        .join(Vendors, Transactions.seller_id == Vendors.id)
+        .filter(Transactions.user_id == user_id)
+        .all()
+    )
+
+    for filter_name, filter_value in filter_dict.items():
+        if filter_value:
+            transactions = [
+                t for t in transactions if getattr(t, filter_name) == filter_value
+            ]
+
+    return transactions
 
 
 @router.post("/parse_file/", response_model=List[SaveTransaction])
@@ -23,8 +79,8 @@ async def parse_file(
     file: UploadFile = File(...),
 ) -> List[SaveTransaction]:
     """
-    This function parses the file and returns a list of dictionaries with the parsed data.
-    params:
+    This function parses the file and returns a list of dictionaries with the parsed data.\n
+    params:\n
         user: UserRecord - Firebase user object
         db: Session - SQLAlchemy database session
         file: UploadFile - file to be parsed
@@ -72,8 +128,8 @@ async def save_file(
     data: List[SaveTransaction] = [],
 ) -> Dict[str, str]:
     """
-    This function saves the parsed data into the database.
-    params:
+    This function saves the parsed data into the database.\n
+    params:\n
         user: UserRecord - Firebase user object
         db: Session - SQLAlchemy database session
         data: List[Dict[str, Union[str, int, None]]] - parsed data from the file
@@ -119,10 +175,10 @@ async def save_file(
 
 def check_existence_in_db(db, table, filter_column, filter_value, user_id, **kwargs):
     """
-    This function checks if a given item exists in the database.
-    If it does, it returns the item.
-    If it doesn't, it creates the item and returns it.
-    Params:
+    This function checks if a given item exists in the database.\n
+    If it does, it returns the item.\n
+    If it doesn't, it creates the item and returns it.\n
+    Params:\n
         db: Session - SQLAlchemy database session
         table: SQLAlchemy table - table to be queried
         filter_column: SQLAlchemy column - column to be used as filter
