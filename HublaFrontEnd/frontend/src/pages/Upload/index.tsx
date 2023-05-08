@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { api } from "api";
+import { format } from "date-fns";
 
-import "./index.css";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import { GrDocumentUpload } from "react-icons/gr";
 import {
@@ -27,15 +27,38 @@ const columns: GridColDef[] = [
     field: "product_description",
     headerName: "Descrição do Produto",
     width: 300,
+    valueFormatter: (params) => {
+      return formatName(params.value as string);
+    },
   },
   {
     field: "transaction_value",
     headerName: "Valor da Transação",
     type: "number",
     width: 200,
+    valueFormatter: (params) => {
+      return new Intl.NumberFormat("pt-BR", {
+        style: "currency",
+        currency: "BRL",
+      }).format(params.value);
+    },
   },
-  { field: "seller_name", headerName: "Nome do Vendedor", width: 200 },
-  { field: "transaction_date", headerName: "Data da Transação", width: 200 },
+  {
+    field: "seller_name",
+    headerName: "Nome do Vendedor",
+    width: 200,
+    valueFormatter: (params) => {
+      return formatName(params.value as string);
+    },
+  },
+  {
+    field: "transaction_date",
+    headerName: "Data da Transação",
+    width: 200,
+    valueFormatter: (params) => {
+      return format(new Date(params.value as string), "dd/MM/yyyy HH:mm:ss");
+    },
+  },
 ];
 
 export default function Upload() {
@@ -83,9 +106,9 @@ export default function Upload() {
   const rows = data.map((row, index) => ({
     id: index,
     transaction_type_description: row.transaction_type_description,
-    product_description: formatName(row.product_description),
+    product_description: row.product_description,
     transaction_value: row.transaction_value,
-    seller_name: formatName(row.seller_name),
+    seller_name: row.seller_name,
     transaction_date: row.transaction_date,
   }));
 
