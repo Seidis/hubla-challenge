@@ -26,15 +26,3 @@ def get_current_user(request: Request) -> auth.UserRecord:
         return auth.get_user(uid)
     except FirebaseError:
         raise HTTPException(status_code=401, detail="Unauthorized")
-
-
-@router.get("/verify")
-async def auth_user(token: str):
-    return validate_token(token)
-
-
-@router.get("/test_protected")
-async def test_protected(
-    user: auth.UserRecord = Depends(get_current_user),
-):
-    return {user}
