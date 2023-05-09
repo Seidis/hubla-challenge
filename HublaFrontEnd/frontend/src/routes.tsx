@@ -10,7 +10,7 @@ import Header from "components/Header";
 
 import Login from "pages/Login";
 import Register from "pages/Register";
-import Default from "pages/Default";
+import Home from "pages/Home";
 import Upload from "pages/Upload";
 import Transactions from "pages/Transactions";
 
@@ -23,7 +23,7 @@ export default function AppRouter() {
         <Route element={<ProtectedRoute />}>
           <Route path="/" element={<Header />}>
             <Route path="*" element={<Navigate to="home" />} />
-            <Route path="home" element={<Default />} />
+            <Route path="home" element={<Home />} />
             <Route path="upload" element={<Upload />} />
             <Route path="transactions" element={<Transactions />} />
           </Route>
