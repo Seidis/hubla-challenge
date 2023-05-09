@@ -136,9 +136,9 @@ async def save_file(
     """
 
     user_id = user._data["localId"]
-    comission = None
 
     for line in data:
+        comission = None
         vendor = check_existence_in_db(
             db=db,
             table=Vendors,

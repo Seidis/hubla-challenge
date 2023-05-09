@@ -28,6 +28,7 @@ export default function MenuTooltip({
       .then(() => {
         localStorage.removeItem("accessToken");
         localStorage.removeItem("refreshToken");
+        localStorage.removeItem("email");
         navigate("/login");
       })
       .catch((error) => {

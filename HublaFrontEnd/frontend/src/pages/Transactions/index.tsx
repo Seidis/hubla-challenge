@@ -1,25 +1,26 @@
+import { useEffect, useState } from "react";
+import { api } from "api";
 import { DataTableColumns, dataStyle } from "utils/data_table";
 import { ITransaction } from "utils/interfaces";
 
 import {
   Box,
   Button,
-  ButtonGroup,
   Container,
   Divider,
   Stack,
   TextField,
 } from "@mui/material";
 import DataTable from "react-data-table-component";
-import { useEffect, useState } from "react";
-import { api } from "api";
 import TableSkeleton from "components/TableSkeleton";
 import { toastError } from "components/Toast";
+import TransactionDrawer from "components/TransactionDrawer";
 
 export default function Transactions() {
   const [data, setData] = useState<ITransaction[]>([]);
   const [search, setSearch] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
+  const [openDrawer, setOpenDrawer] = useState<boolean>(false);
 
   const handleLoadTransactions = async (search: string = "") => {
     setLoading(true);
@@ -66,8 +67,23 @@ export default function Transactions() {
             >
               Pesquisar
             </Button>
+            <Button
+              onClick={() => {
+                handleLoadTransactions();
+                setSearch("");
+              }}
+              disabled={search ? false : true}
+            >
+              Limpar
+            </Button>
           </Stack>
-          <Button>Nova Transação</Button>
+          {/* <Button
+            onClick={() => {
+              setOpenDrawer(true);
+            }}
+          >
+            Nova Transação
+          </Button> */}
         </Stack>
       </Box>
       <DataTable
@@ -96,6 +112,10 @@ export default function Transactions() {
         highlightOnHover
         pointerOnHover
         dense
+      />
+      <TransactionDrawer
+        openDrawer={openDrawer}
+        setOpenDrawer={setOpenDrawer}
       />
     </Container>
   );
