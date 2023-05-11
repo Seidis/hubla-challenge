@@ -1,5 +1,5 @@
 import { GridColDef } from "@mui/x-data-grid";
-import { formatName } from "./functions";
+import { formatName, formatPrice } from "./functions";
 import { format } from "date-fns";
 import { ITransaction } from "./interfaces";
 import { TableColumn } from "react-data-table-component";
@@ -25,10 +25,7 @@ export const DataGridColumns: GridColDef[] = [
     type: "number",
     width: 200,
     valueFormatter: (params) => {
-      return new Intl.NumberFormat("pt-BR", {
-        style: "currency",
-        currency: "BRL",
-      }).format(params.value);
+      formatPrice(params.value as number);
     },
   },
   {
@@ -81,10 +78,7 @@ export const DataTableColumns: TableColumn<ITransaction>[] = [
     sortable: true,
     width: "220px",
     cell: (row: any) => {
-      return new Intl.NumberFormat("pt-BR", {
-        style: "currency",
-        currency: "BRL",
-      }).format(row.transaction_value);
+      return formatPrice(row.transaction_value);
     },
   },
   {
@@ -104,10 +98,7 @@ export const DataTableColumns: TableColumn<ITransaction>[] = [
     sortable: true,
     width: "200px",
     cell: (row: any) => {
-      const formatedNumber = Intl.NumberFormat("pt-BR", {
-        style: "currency",
-        currency: "BRL",
-      }).format(row.comission);
+      const formatedNumber = formatPrice(row.comission);
       return row.signal ? (
         <Chip
           label={formatedNumber}

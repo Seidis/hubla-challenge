@@ -12,9 +12,10 @@ export default function Title({ title }: { title: string }) {
         <Box
           sx={{
             display: "flex",
-            backgroundColor: "#F7D358",
+            backgroundColor: "#c9ffcb",
             height: "40px",
-            width: "15px",
+            width: "8px",
+            borderRadius: "5px",
           }}
         />
         <Typography

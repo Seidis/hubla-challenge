@@ -1,40 +1,41 @@
-import Stack from "@mui/material/Stack";
-import Typography from "@mui/material/Typography";
+import { Stack, Typography } from "@mui/material";
 import Card from "components/Card";
 import Chart from "react-google-charts";
 import { formatPrice } from "utils/functions";
 
-export default function CardTotal({
+export default function CardOwner({
   transactions,
   loading,
 }: {
   transactions: any[];
   loading: boolean;
 }) {
-  const afiliateTotal = transactions.reduce((a, b) => {
-    if (b.transaction_type === 1 || b.transaction_type === 2) {
-      if (b.seller_name in a) {
-        a[b.seller_name] += b.transaction_value;
-      } else {
-        a[b.seller_name] = b.transaction_value;
-      }
-    }
-    return a;
-  }, {});
-
-  const chartData = [["Afiliado", "Vendas"], ...Object.entries(afiliateTotal)];
   const totalTransactions = transactions.reduce((a, b) => {
     if (b.transaction_type === 1 || b.transaction_type === 2) {
       a += b.transaction_value;
     }
     return a;
   }, 0);
+  const totalCommission = transactions.reduce((a, b) => {
+    if (b.transaction_type === 3) {
+      a += b.comission;
+    }
+    return a;
+  }, 0);
+
+  const totalOwner = totalTransactions - totalCommission;
+
+  const chartData = [
+    ["Tipo", "Valor"],
+    ["Saldo do Produtor", totalOwner],
+    ["Comissões por Venda", totalCommission],
+  ];
 
   return (
-    <Card title="Total em Vendas" loading={loading}>
+    <Card title="Saldo do Produtor" loading={loading}>
       <Stack direction="column" alignItems="center" sx={{ width: "100%" }}>
         <Typography variant="h6" sx={{ mb: 5 }}>
-          {formatPrice(totalTransactions)}
+          {formatPrice(totalOwner)}
         </Typography>
         <Chart
           width={"100%"}
@@ -48,6 +49,7 @@ export default function CardTotal({
               width: "100%",
               height: "100%",
             },
+            colors: ["#00b300", "#ff0000"],
           }}
         />
       </Stack>
