@@ -4,15 +4,16 @@ from routes import routes
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi_sqlalchemy import DBSessionMiddleware
+from fastapi.testclient import TestClient
 from dotenv import load_dotenv
 
 load_dotenv()
 
-app = FastAPI(
+api = FastAPI(
     title="Desafio da Hubla", description="API para o desafio da Hubla", version="0.1.0"
 )
 
-app.add_middleware(
+api.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
     allow_credentials=True,
@@ -21,7 +22,7 @@ app.add_middleware(
 )
 
 
-@app.on_event("startup")
+@api.on_event("startup")
 async def startup():
     try:
         database.Base.metadata.create_all(database.engine)
@@ -30,7 +31,10 @@ async def startup():
         raise e
 
 
-app.add_middleware(DBSessionMiddleware, db_url=os.getenv("DATABASE_URL"))
+api.add_middleware(DBSessionMiddleware, db_url=os.getenv("DATABASE_URL"))
 
 
-app.include_router(routes)
+api.include_router(routes)
+
+
+# TestClient(api)
