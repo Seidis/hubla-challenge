@@ -1,18 +1,15 @@
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 import Card from "components/Card";
-import Chart from "react-google-charts";
+import PieChart from "components/PieChart";
 import { formatPrice } from "utils/functions";
+import { ICards } from "utils/interfaces";
 
-export default function cardAfiliate({
+export default function CardAfiliate({
   transactions,
   loading,
   afiliate,
-}: {
-  transactions: any[];
-  loading: boolean;
-  afiliate?: string;
-}) {
+}: ICards) {
   const commissions = transactions.reduce((a, b) => {
     if (b.transaction_type === 4) {
       if (b.seller_name in a) {
@@ -30,8 +27,6 @@ export default function cardAfiliate({
     return a;
   }, 0);
 
-  const chartData = [["Afiliado", "Comissão"], ...Object.entries(commissions)];
-
   return (
     <Card
       title={afiliate ? `Saldo de ${afiliate}` : "Saldo dos Afiliados"}
@@ -40,23 +35,12 @@ export default function cardAfiliate({
       <Stack direction="column" alignItems="center" sx={{ width: "100%" }}>
         <Typography variant="h6" sx={{ mb: 5 }}>
           {afiliate
-            ? formatPrice(commissions[afiliate])
+            ? commissions[afiliate]
+              ? formatPrice(commissions[afiliate])
+              : formatPrice(0)
             : formatPrice(totalComissions)}
         </Typography>
-        <Chart
-          width={"100%"}
-          height={"100%"}
-          chartType="PieChart"
-          data={chartData}
-          options={{
-            chartArea: {
-              left: 0,
-              top: 0,
-              width: "100%",
-              height: "100%",
-            },
-          }}
-        />
+        <PieChart data={commissions} afiliate={afiliate} />
       </Stack>
     </Card>
   );

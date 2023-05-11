@@ -2,13 +2,12 @@ import Box from "@mui/material/Box";
 import Divider from "@mui/material/Divider";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
-import Skeleton from "@mui/material/Skeleton";
 import SkeletonPie from "./SkeletonPie";
 
 export default function Card({ title, children, sx, loading }: any) {
   const style = {
     ...sx,
-    height: "370px",
+    height: "auto",
     backgroundColor: "#fff",
     borderRadius: 3,
     border: 0,

@@ -1,4 +1,4 @@
-import { Divider, Skeleton, Stack } from "@mui/material";
+import { Divider, Grid, Skeleton, Stack } from "@mui/material";
 
 export default function SkeletonPie() {
   return (
@@ -17,12 +17,38 @@ export default function SkeletonPie() {
       <Skeleton
         variant="circular"
         width="80%"
-        height="55%"
+        height="250px"
         sx={{
-          mt: "70px",
+          mt: "50px",
           borderRadius: "50%",
         }}
       />
+      <Grid container spacing={2} sx={{ mt: "50px" }}>
+        <Grid item xs={6}>
+          <Skeleton
+            variant="rectangular"
+            width="60%"
+            height="10px"
+            sx={{ margin: "auto" }}
+          />
+        </Grid>
+        <Grid item xs={6}>
+          <Skeleton
+            variant="rectangular"
+            width="60%"
+            height="10px"
+            sx={{ margin: "auto" }}
+          />
+        </Grid>
+        <Grid item xs={12}>
+          <Skeleton
+            variant="rectangular"
+            width="60%"
+            height="10px"
+            sx={{ margin: "auto" }}
+          />
+        </Grid>
+      </Grid>
     </Stack>
   );
 }

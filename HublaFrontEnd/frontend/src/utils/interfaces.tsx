@@ -8,3 +8,9 @@ export interface ITransaction {
   comission: number;
   signal: boolean;
 }
+
+export interface ICards {
+  transactions: any[];
+  loading: boolean;
+  afiliate: string;
+}

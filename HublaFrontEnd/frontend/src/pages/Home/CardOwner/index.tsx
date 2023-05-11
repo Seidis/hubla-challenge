@@ -1,15 +1,10 @@
 import { Stack, Typography } from "@mui/material";
 import Card from "components/Card";
-import Chart from "react-google-charts";
+import PieChart from "components/PieChart";
 import { formatPrice } from "utils/functions";
+import { ICards } from "utils/interfaces";
 
-export default function CardOwner({
-  transactions,
-  loading,
-}: {
-  transactions: any[];
-  loading: boolean;
-}) {
+export default function CardOwner({ transactions, loading, afiliate }: ICards) {
   const totalTransactions = transactions.reduce((a, b) => {
     if (b.transaction_type === 1 || b.transaction_type === 2) {
       a += b.transaction_value;
@@ -25,11 +20,10 @@ export default function CardOwner({
 
   const totalOwner = totalTransactions - totalCommission;
 
-  const chartData = [
-    ["Tipo", "Valor"],
-    ["Saldo do Produtor", totalOwner],
-    ["Comissões por Venda", totalCommission],
-  ];
+  const chartData = {
+    "Saldo do Produtor": totalOwner,
+    "Comissões por Venda": totalCommission,
+  };
 
   return (
     <Card title="Saldo do Produtor" loading={loading}>
@@ -37,21 +31,7 @@ export default function CardOwner({
         <Typography variant="h6" sx={{ mb: 5 }}>
           {formatPrice(totalOwner)}
         </Typography>
-        <Chart
-          width={"100%"}
-          height={"100%"}
-          chartType="PieChart"
-          data={chartData}
-          options={{
-            chartArea: {
-              left: 0,
-              top: 0,
-              width: "100%",
-              height: "100%",
-            },
-            colors: ["#00b300", "#ff0000"],
-          }}
-        />
+        <PieChart data={chartData} afiliate={afiliate} />
       </Stack>
     </Card>
   );
