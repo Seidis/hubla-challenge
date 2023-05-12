@@ -30,8 +30,6 @@ firebaseConfig = {
 firebase = pyrebase.initialize_app(firebaseConfig)
 auth = firebase.auth()
 
-login = auth.sign_in_with_email_and_password("pluizarruda@gmail.com", "123456")
-
 
 def check_testserver(func):
     @functools.wraps(func)

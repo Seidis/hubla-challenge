@@ -4,14 +4,14 @@ from fastapi.testclient import TestClient
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, scoped_session
 
-from app import api
+from app import app
 from models import Base
 
-DATABASE_URL = "sqlite:///test.db"
+DATABASE_URL = "sqlite:///teste.db"
 
 
 def client():
-    return TestClient(api)
+    return TestClient(app)
 
 
 engine = create_engine(DATABASE_URL, connect_args={"check_same_thread": False})

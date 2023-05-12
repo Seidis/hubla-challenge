@@ -26,6 +26,10 @@ HublaFrontEnd/frontend/.env
 /HublaBackEnd/db
 /HublaBackEnd/.env
 
+# Coverage
+/HublaBackEnd/htmlcov/
+/HublaBackEnd/.coverage
+
 .pytest_cache/
 *.pyc
 __pycache__/
