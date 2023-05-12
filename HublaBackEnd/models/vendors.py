@@ -7,5 +7,5 @@ class Vendors(Base):
     __tablename__ = "vendors"
 
     id = Column(Integer, primary_key=True, index=True)
-    name = Column(String, unique=True, index=True)
+    name = Column(String, index=True)
     user_id = Column(Integer, index=True)
