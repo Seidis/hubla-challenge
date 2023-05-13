@@ -14,13 +14,11 @@ import {
 import DataTable from "react-data-table-component";
 import TableSkeleton from "components/TableSkeleton";
 import { toastError } from "components/Toast";
-import TransactionDrawer from "components/TransactionDrawer";
 
 export default function Transactions() {
   const [data, setData] = useState<ITransaction[]>([]);
   const [search, setSearch] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
-  const [openDrawer, setOpenDrawer] = useState<boolean>(false);
 
   const handleLoadTransactions = async (search: string = "") => {
     setLoading(true);
@@ -105,10 +103,6 @@ export default function Transactions() {
         highlightOnHover
         pointerOnHover
         dense
-      />
-      <TransactionDrawer
-        openDrawer={openDrawer}
-        setOpenDrawer={setOpenDrawer}
       />
     </Container>
   );
