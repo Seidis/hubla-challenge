@@ -1,8 +1,10 @@
 import { useEffect, useState } from "react";
 import { api } from "api";
+import { ReactComponent as NotFound } from "assets/notfound.svg";
 
 import {
   Autocomplete,
+  Box,
   CircularProgress,
   Grid,
   Stack,
@@ -27,12 +29,10 @@ export default function Home() {
   const [afiliatesData, setAfiliatesData] = useState<any[]>([]);
   const [afiliate, setAfiliate] = useState<any>();
 
-  const handleLoadData = async (search: string = "") => {
+  const handleLoadData = async () => {
     setLoading(true);
     await api
-      .get("/transactions", {
-        params: search,
-      })
+      .get("/transactions")
       .then((response) => {
         setData(response.data);
       })
@@ -68,77 +68,96 @@ export default function Home() {
   return (
     <Container>
       <Title title="Dashboard" />
-      <Stack
-        spacing={2}
-        direction="row"
-        sx={{ marginBottom: 2 }}
-        alignItems="center"
-        justifyContent="center"
-      >
-        <Typography variant="h6">
-          Selecione um vendedor para filtrar os valores:
-        </Typography>
-        <Autocomplete
-          sx={{ width: 300 }}
-          open={open}
-          onOpen={() => {
-            setOpen(true);
-            loadAfiliatesData();
-          }}
-          onClose={() => {
-            setOpen(false);
-          }}
-          isOptionEqualToValue={(option, value) => option.title === value.title}
-          getOptionLabel={(option) => option.title}
-          options={afiliatesData.map((afiliate) => ({
-            title: afiliate.name,
-          }))}
-          loading={loadingAfiliates}
-          onChange={(event, newValue) => {
-            setAfiliate(newValue?.title);
-          }}
-          renderInput={(params) => (
-            <TextField
-              {...params}
-              label="Vendedores"
-              InputProps={{
-                ...params.InputProps,
-                endAdornment: (
-                  <>
-                    {loading ? (
-                      <CircularProgress color="inherit" size={20} />
-                    ) : null}
-                    {params.InputProps.endAdornment}
-                  </>
-                ),
+      {data.length > 0 ? (
+        <>
+          <Stack
+            spacing={2}
+            direction="row"
+            sx={{ marginBottom: 2 }}
+            alignItems="center"
+            justifyContent="center"
+          >
+            <Typography variant="h6">
+              Selecione um vendedor para filtrar os valores:
+            </Typography>
+            <Autocomplete
+              sx={{ width: 300 }}
+              open={open}
+              onOpen={() => {
+                setOpen(true);
+                loadAfiliatesData();
               }}
+              onClose={() => {
+                setOpen(false);
+              }}
+              isOptionEqualToValue={(option, value) =>
+                option.title === value.title
+              }
+              getOptionLabel={(option) => option.title}
+              options={afiliatesData.map((afiliate) => ({
+                title: afiliate.name,
+              }))}
+              loading={loadingAfiliates}
+              onChange={(event, newValue) => {
+                setAfiliate(newValue?.title);
+              }}
+              renderInput={(params) => (
+                <TextField
+                  {...params}
+                  label="Vendedores"
+                  InputProps={{
+                    ...params.InputProps,
+                    endAdornment: (
+                      <>
+                        {loading ? (
+                          <CircularProgress color="inherit" size={20} />
+                        ) : null}
+                        {params.InputProps.endAdornment}
+                      </>
+                    ),
+                  }}
+                />
+              )}
             />
-          )}
-        />
-      </Stack>
-      <Grid container spacing={5}>
-        <Grid item xs={12} md={6} lg={4}>
-          <CardTotal
-            transactions={data}
-            loading={loading}
-            afiliate={afiliate}
-          />
-        </Grid>
-        <Grid item xs={12} md={6} lg={4}>
-          <CardOwner
-            transactions={data}
-            loading={loading}
-            afiliate={afiliate}
-          />
-        </Grid>
-        <Grid item xs={12} md={6} lg={4}>
-          <CardAfiliate
-            transactions={data}
-            loading={loading}
-            afiliate={afiliate}
-          />
-        </Grid>
-      </Grid>
+          </Stack>
+          <Grid container spacing={5}>
+            <Grid item xs={12} md={6} lg={4}>
+              <CardTotal
+                transactions={data}
+                loading={loading}
+                afiliate={afiliate}
+              />
+            </Grid>
+            <Grid item xs={12} md={6} lg={4}>
+              <CardOwner
+                transactions={data}
+                loading={loading}
+                afiliate={afiliate}
+              />
+            </Grid>
+            <Grid item xs={12} md={6} lg={4}>
+              <CardAfiliate
+                transactions={data}
+                loading={loading}
+                afiliate={afiliate}
+              />
+            </Grid>
+          </Grid>
+        </>
+      ) : (
+        <Box
+          sx={{
+            width: "65%",
+            height: "auto",
+            margin: "auto",
+          }}
+        >
+          <NotFound />
+          <Typography variant="h6" align="center">
+            Nenhuma transação encontrada!
+          </Typography>
+        </Box>
+      )}
     </Container>
   );
 }

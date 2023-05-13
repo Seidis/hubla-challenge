@@ -2,7 +2,7 @@ import { auth } from "config/firebase";
 import { signOut } from "firebase/auth";
 
 import { Logout } from "@mui/icons-material";
-import { Avatar, Divider, ListItemIcon, Menu, MenuItem } from "@mui/material";
+import { ListItemIcon, Menu, MenuItem } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 
 type MenuTooltipProps = {
@@ -71,10 +71,6 @@ export default function MenuTooltip({
       transformOrigin={{ horizontal: "right", vertical: "top" }}
       anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
     >
-      <MenuItem onClick={handleClose}>
-        <Avatar /> Profile
-      </MenuItem>
-      <Divider />
       <MenuItem onClick={handleLogOut}>
         <ListItemIcon>
           <Logout fontSize="small" />

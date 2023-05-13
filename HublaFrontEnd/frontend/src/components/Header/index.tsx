@@ -32,7 +32,13 @@ export default function Header() {
       <Grid container spacing={2} className="header__container">
         <Grid item xs={2} className="header__logo">
           <Box className="header__logo__img">
-            <img src={Logo} alt="logo" />
+            <Button
+              onClick={() => {
+                navigateTo("/home");
+              }}
+            >
+              <img src={Logo} alt="logo" />
+            </Button>
           </Box>
         </Grid>
         <Grid item xs={7}>
@@ -42,6 +48,13 @@ export default function Header() {
             alignItems={"center"}
             spacing={2}
           >
+            <Button
+              variant="outlined"
+              color="success"
+              onClick={() => navigateTo("/home")}
+            >
+              Home
+            </Button>
             <Button
               variant="outlined"
               color="success"
@@ -55,13 +68,6 @@ export default function Header() {
               onClick={() => navigateTo("/transactions")}
             >
               Transações
-            </Button>
-            <Button
-              variant="outlined"
-              color="success"
-              onClick={() => navigateTo("/about")}
-            >
-              Sobre o Projeto
             </Button>
           </Stack>
         </Grid>
