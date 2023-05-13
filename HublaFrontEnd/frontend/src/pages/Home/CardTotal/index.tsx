@@ -31,7 +31,9 @@ export default function CardTotal({ transactions, loading, afiliate }: ICards) {
     >
       <Stack direction="column" alignItems="center" sx={{ width: "100%" }}>
         <Typography variant="h6" sx={{ mb: 5 }}>
-          {formatPrice(totalTransactions)}
+          {afiliate
+            ? formatPrice(afiliateTotal[afiliate])
+            : formatPrice(totalTransactions)}
         </Typography>
         <PieChart data={afiliateTotal} afiliate={afiliate} />
       </Stack>
