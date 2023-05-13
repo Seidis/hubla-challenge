@@ -77,13 +77,6 @@ export default function Transactions() {
               Limpar
             </Button>
           </Stack>
-          {/* <Button
-            onClick={() => {
-              setOpenDrawer(true);
-            }}
-          >
-            Nova Transação
-          </Button> */}
         </Stack>
       </Box>
       <DataTable

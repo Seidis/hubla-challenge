@@ -4,11 +4,12 @@ from api.auth import get_current_user
 from fastapi_sqlalchemy.middleware import db
 
 from models.products import Products
+from schemas.products import Product
 
 router = APIRouter()
 
 
-@router.get("/", response_model=list[Products])
+@router.get("/", response_model=List[Product])
 async def get_products(user=Depends(get_current_user)) -> List[Products]:
     """
     This function returns a list of products based on the logged user.\n
