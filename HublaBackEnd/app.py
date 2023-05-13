@@ -30,7 +30,7 @@ async def startup():
         raise e
 
 
-app.add_middleware(DBSessionMiddleware, db_url=os.getenv("DATABASE_URL"))
+app.add_middleware(DBSessionMiddleware, db_url=os.environ["DATABASE_URL"])
 
 
 app.include_router(routes)

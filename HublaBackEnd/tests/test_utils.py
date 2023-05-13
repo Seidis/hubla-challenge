@@ -31,30 +31,7 @@ firebase = pyrebase.initialize_app(firebaseConfig)
 auth = firebase.auth()
 
 
-def check_testserver(func):
-    @functools.wraps(func)
-    def wrapper_func(*args, **kwargs):
-        for instance in args:
-            try:
-                user_agent = instance.headers.get("user-agent")
-                if user_agent == "testclient":
-                    return None
-            except AttributeError as error:
-                logging.error(
-                    "Atribute error while trying to check testserver: %s",
-                    error,
-                )
+def get_header(email="service_account@test.com", password="e89pKj0fv*D#"):
+    accessToken = auth.sign_in_with_email_and_password(email, password).get("idToken")
 
-        func(*args, **kwargs)
-
-    return wrapper_func
-
-
-def get_login(email, password):
-    return auth.sign_in_with_email_and_password(email, password)
-
-
-def get_header():
-    return {
-        "Authorization": f"Bearer {get_login('pluizarruda@gmail.com', '123456').get('idToken')}"
-    }
+    return {"Authorization": f"Bearer {accessToken}"}

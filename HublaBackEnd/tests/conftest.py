@@ -1,16 +1,25 @@
+"""
+    Module Docstring
+"""
+
 import os
 import pytest
 from fastapi.testclient import TestClient
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, scoped_session
 
+DATABASE_URL = "sqlite:///teste.db"
+
+os.environ["DATABASE_URL"] = DATABASE_URL
+
 from app import app
 from models import Base
 
-DATABASE_URL = "sqlite:///teste.db"
-
 
 def client():
+    """
+    Docstring
+    """
     return TestClient(app)
 
 
@@ -20,7 +29,6 @@ session = scoped_session(sessionmaker(bind=engine))
 Base.metadata.create_all(bind=engine)
 
 from tests.database import initialize_database_instances
-from tests.db_utils import dispatch_database
 
 
 @pytest.fixture(scope="session", autouse=True)
@@ -28,7 +36,7 @@ def database():
     try:
         initialize_database_instances(session)
         yield
-        dispatch_database()
+        os.remove("teste.db")
     except:
-        dispatch_database()
+        os.remove("teste.db")
         raise
