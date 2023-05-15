@@ -30,8 +30,10 @@ firebaseConfig = {
 firebase = pyrebase.initialize_app(firebaseConfig)
 auth = firebase.auth()
 
+user = auth.sign_in_with_email_and_password("service_account@test.com", "e89pKj0fv*D#")
 
-def get_header(email="service_account@test.com", password="e89pKj0fv*D#"):
-    accessToken = auth.sign_in_with_email_and_password(email, password).get("idToken")
+
+def get_header():
+    accessToken = user.get("idToken")
 
     return {"Authorization": f"Bearer {accessToken}"}

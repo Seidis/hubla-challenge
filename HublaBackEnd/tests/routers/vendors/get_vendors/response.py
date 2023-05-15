@@ -8,4 +8,10 @@ get_vendor = [
     {
         "name": "Jose Silva",
     },
+    {
+        "name": "JOSE CARLOS",
+    },
+    {
+        "name": "MARIA CANDIDA",
+    },
 ]
