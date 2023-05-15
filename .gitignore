@@ -4,7 +4,6 @@
 
 # Dependencies
 /HublaFrontend/frontend/node_modules
-HublaFrontEnd/frontend/.env
 
 # Build cache
 .cache
@@ -23,7 +22,6 @@ HublaFrontEnd/frontend/.env
 
 # Python
 /HublaBackEnd/venv
-/HublaBackEnd/.env
 
 # Coverage
 /HublaBackEnd/htmlcov/
