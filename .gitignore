@@ -23,7 +23,6 @@ HublaFrontEnd/frontend/.env
 
 # Python
 /HublaBackEnd/venv
-/HublaBackEnd/db
 /HublaBackEnd/.env
 
 # Coverage
