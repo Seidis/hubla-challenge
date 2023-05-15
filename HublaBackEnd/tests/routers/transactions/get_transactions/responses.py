@@ -55,3 +55,28 @@ get_transactions = [
         "signal": True,
     },
 ]
+
+get_transactions_with_search = [
+    {
+        "transaction_type": 1,
+        "transaction_date": "2022-01-15T19:20:30",
+        "transaction_type_description": "Venda produtor",
+        "seller_name": "Joao Silva",
+        "transaction_value": 100.0,
+        "product_description": "CURSO DE ANGULAR",
+        "id": 1,
+        "comission": None,
+        "signal": True,
+    },
+    {
+        "transaction_type": 1,
+        "transaction_date": "2022-01-15T19:20:30",
+        "transaction_type_description": "Venda produtor",
+        "seller_name": "Joao Silva",
+        "transaction_value": 200.0,
+        "product_description": "CURSO DE PYTHON",
+        "id": 2,
+        "comission": None,
+        "signal": True,
+    },
+]
